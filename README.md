@@ -23,6 +23,19 @@ A robust grading system designed to handle SSC-level result processing.
   - Logic to detect subject-wise failure regardless of average marks.
 - **Tech Used:** Python (Lists, Loops, Exception Handling).
 
+### 02. Fruit Shop System 🍎 (Version 1.0)
+A modular command-line application that simulates a real-world fruit store experience.
+
+- **Features:** - Dynamic Cart: Users can select multiple fruits, and the system manages quantities using Python Dictionaries.
+
+Smart Validation: Uses Recursion to handle invalid "yes/no" inputs and ensures quantity is always a number.
+
+Billing Logic: Automatically calculates sub-totals, applies a 10% discount if the bill exceeds $50, and generates a formatted receipt.
+
+Error Prevention: Includes a built-in check for unavailable fruits with a "Retry or Exit" menu.
+
+- **Tech Used:** Python (Dictionaries, Functions, Recursion, While Loops, f-strings).
+
 ---*This repository is updated regularly as I learn new concepts.*
 
 ## 📈 Future Goals
