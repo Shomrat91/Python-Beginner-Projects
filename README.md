@@ -36,6 +36,19 @@ Error Prevention: Includes a built-in check for unavailable fruits with a "Retry
 
 - **Tech Used:** Python (Dictionaries, Functions, Recursion, While Loops, f-strings).
 
+  ### 03. AI-Powered Hand Cricket 🏏 (v1.0)
+
+A strategic command-line game where the AI uses **Weighted Probability** to challenge the player, making it more than just a game of luck.
+
+* **Key Features:**
+    * **Smart AI Engine:** Uses probability weights instead of pure randomness. In **Hard Mode**, the AI predicts common player moves to increase the chance of getting them out.
+    * **Context-Aware Strategy:** The AI automatically switches its logic between **Batting** (aiming for high runs) and **Bowling** (targeting wickets) based on the game state.
+    * **Complete Match Simulation:** Features a Toss system, 5-over match logic, target chasing, and wicket management.
+    * **Robust Input Validation:** Uses `try-except` blocks to prevent crashes from invalid inputs, ensuring a smooth user experience.
+* **Tech Used:** Python (Random Module, Weighted Choices, Function Parameters, State Management).
+
+---
+
 ---*This repository is updated regularly as I learn new concepts.*
 
 ## 📈 Future Goals
