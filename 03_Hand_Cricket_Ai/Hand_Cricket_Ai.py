@@ -1,21 +1,16 @@
 import random
 
-# ==========================================
-# 1. STATE MANAGEMENT (For Future[2.0])
-# ==========================================
 stats = {
     "User": {"runs": 0, "wickets": 0},
     "AI": {"runs": 0, "wickets": 0}
 }
 
-# ==========================================
-# 2. USER/AI MOVE
-# ==========================================
-def get_user_move():
+def get_user_move(is_bowling=False):
     while True:
         try:
             print("-" * 30)
-            user_move = int(input("🏏 Your Turn (0-6): "))
+            prompt = "🥎 Your Bowling Move (0-6): " if is_bowling else "🏏 Your Batting Move (0-6): "
+            user_move = int(input(prompt))
             if 0 <= user_move <= 6:
                 return user_move
             else:
@@ -29,20 +24,20 @@ def get_ai_move(mode, is_ai_batting):
     if mode == 'easy':
         return random.randint(0, 6)
     elif mode == 'normal':
-        weights = [1.5, 1.5, 1.5, 1, 1, 1, 1] # মিক্সড
+        weights = [1.5, 1.5, 1.5, 1, 1, 1, 1]
         return random.choices(numbers, weights=weights)[0]
     elif mode == 'hard':
         if is_ai_batting:     
-            weights = [3, 3, 3, 1, 1, 1, 1] 
+            weights = [1, 1, 1, 1, 2, 3, 5] 
         else:
             weights = [1, 1, 1, 1, 1, 4, 5] 
         return random.choices(numbers, weights=weights)[0]
     return random.randint(0, 6)
 
-# ==========================================
-# 3. TOSS SYSTEM
-# ==========================================
 def perform_toss():
+    print("\n" + "="*40)
+    print("      WELCOME TO HAND CRICKET v1.0      ")
+    print("="*40)
     
     toss_choice = ''
     while toss_choice not in ['head', 'tail']:
@@ -69,9 +64,6 @@ def perform_toss():
         print(f"🤖 AI decided to {ai_selection} first.")
         return ('AI', 'User') if ai_selection == 'bat' else ('User', 'AI')
 
-# ==========================================
-# 4. GAME ENGINE (Innings Logic)
-# ==========================================
 def play_innings(batting_player, bowling_player, target=None, mode ='easy'):
     print(f"\n{'*' * 10} {batting_player.upper()} IS BATTING {'*' * 10}")
     current_runs = 0
@@ -82,14 +74,21 @@ def play_innings(batting_player, bowling_player, target=None, mode ='easy'):
     balls_bowled = 0 
 
     while current_wickets < max_wickets and balls_bowled < total_balls:
-        u_move = get_user_move()
-        
-        ai_is_batting = (batting_player == 'AI')
-        a_move = get_ai_move(mode, ai_is_batting)
+        if batting_player == 'User':
+            u_move = get_user_move(is_bowling=False)
+            a_move = get_ai_move(mode, is_ai_batting=False)
+        else:
+            u_move = get_user_move(is_bowling=True)
+            a_move = get_ai_move(mode, is_ai_batting=True)
 
         balls_bowled += 1
-        over_num = balls_bowled // 6
-        ball_num = balls_bowled % 6
+        over_num = (balls_bowled - 1) // 6
+        ball_in_over = (balls_bowled - 1) % 6 + 1
+        
+        if ball_in_over == 6:
+            display_over = f"{over_num + 1}.0"
+        else:
+            display_over = f"{over_num}.{ball_in_over}"
 
         print(f"\n📤 Moves: User [{u_move}] vs AI [{a_move}]")
 
@@ -101,24 +100,20 @@ def play_innings(batting_player, bowling_player, target=None, mode ='easy'):
             current_runs += run_scored
             print(f"✅ Safe! {run_scored} runs added.")
 
-        print(f"📊 Score: {current_runs}/{current_wickets} | Over: {over_num}.{ball_num}")
+        print(f"📊 Score: {current_runs}/{current_wickets} | Over: {display_over}")
         print(f"⏳ Balls Left: {total_balls - balls_bowled}")
 
         if target is not None: 
-            print(f"🎯 Need {target - current_runs} more to win.")
             if current_runs >= target:
                 print(f"\n🔥 Target reached by {batting_player}!")
                 break
+            print(f"🎯 Need {target - current_runs} more to win.")
 
+    stats[batting_player]["runs"] = current_runs
+    stats[batting_player]["wickets"] = current_wickets
     return current_runs
 
-# ==========================================
-# 5. MAIN CONTROLLER
-# ==========================================
 def main():
-    print("\n" + "="*40)
-    print("      WELCOME TO HAND CRICKET v1.0      ")
-    print("="*40)
     print("\nSelect Difficulty:")
     print("1. Easy | 2. Normal | 3. Hard")
     choice = input("Enter choice (1/2/3): ")
@@ -149,6 +144,10 @@ def main():
         print("\n🤝 MATCH DRAW!")
     else:
         print(f"\n🏆 CONGRATULATIONS! {batter.upper()} WON!")
+    
+    print(f"\n--- Final Stats ---")
+    print(f"User: {stats['User']['runs']} runs, {stats['User']['wickets']} wickets")
+    print(f"AI: {stats['AI']['runs']} runs, {stats['AI']['wickets']} wickets")
     print("#" * 40 + "\n")
 
 if __name__ == "__main__":
